@@ -70,9 +70,9 @@ fun DashBoard() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (redBorder, searchField, promoBanner) = createRefs()
+            val (redBorder, searchField, promoBanner, categorySection) = createRefs()
 
-            // 🔴 Header
+            // 🔴 HEADER
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,7 +114,7 @@ fun DashBoard() {
                 }
             }
 
-            // 🔍 Search Field
+            // 🔍 SEARCH BAR
             var searchText by rememberSaveable { mutableStateOf("") }
 
             TextField(
@@ -149,7 +149,7 @@ fun DashBoard() {
                     .background(Color.White, CircleShape)
             )
 
-            // 🏷️ Promo Banner
+            // 🏷️ PROMO BANNER
             ConstraintLayout(
                 modifier = Modifier
                     .constrainAs(promoBanner) {
@@ -164,11 +164,17 @@ fun DashBoard() {
                     .background(color = myRed)
             ) {
                 val (bannerImage, flatText, freeText, couponText) = createRefs()
-                Image(modifier = Modifier.constrainAs(bannerImage){
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }, painter = painterResource(id = R.drawable.bannerimg), contentDescription = null)
+
+                Image(
+                    painter = painterResource(id = R.drawable.bannerimg),
+                    contentDescription = null,
+                    modifier = Modifier.constrainAs(bannerImage) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    }
+                )
+
                 Text(
                     text = "FLAT 50% OFF",
                     fontSize = 28.sp,
@@ -176,203 +182,103 @@ fun DashBoard() {
                     color = Color.White,
                     modifier = Modifier
                         .padding(top = 32.dp)
-                        .constrainAs(flatText){
+                        .constrainAs(flatText) {
                             top.linkTo(parent.top)
-                            end.linkTo(bannerImage.start)
                             start.linkTo(parent.start)
+                            end.linkTo(bannerImage.start)
                         }
                 )
+
                 Text(
                     text = "Free Delivery + 10% Cashback",
                     fontSize = 12.sp,
                     color = Color.White,
-                    modifier = Modifier.constrainAs(freeText){
+                    modifier = Modifier.constrainAs(freeText) {
                         top.linkTo(flatText.bottom)
-                        end.linkTo(flatText.end)
                         start.linkTo(flatText.start)
                     }
                 )
+
                 Text(
-                    text = "Coupon Code: F0D050",
+                    text = "Coupon Code: FOOD50",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    modifier = Modifier.padding(top = 16.dp)
-                        .constrainAs(couponText){
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .constrainAs(couponText) {
                             top.linkTo(freeText.bottom)
-                            end.linkTo(freeText.end)
-                            start.linkTo(freeText.start)
+                            start.linkTo(flatText.start)
                         }
                 )
-                Text(text = "CATEGORIES",
+            }
+
+            // 🍽️ CATEGORIES SECTION
+            Column(
+                modifier = Modifier
+                    .constrainAs(categorySection) {
+                        top.linkTo(promoBanner.bottom, margin = 24.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "CATEGORIES",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                ){
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.cake), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Cake",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.pizza), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Pizza",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.sandwiches), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Sandwich",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                ){
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.noodles), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Noodles",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.pasta), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Pasta",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.biryani), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Biryani",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                ){
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.burger), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Burger",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.icecream), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Ice Cream",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
-                    }
-                    Column(modifier = Modifier.weight(0.25f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painter = painterResource(id = R.drawable.dalrice), contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .shadow(3.dp, shape = RoundedCornerShape(10.dp))
-                                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                                .padding(16.dp)
-                        )
-                        Text(text="Dal Rice",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top=8.dp),
-                            color = Color.Black
-                        )
+
+                val categories = listOf(
+                    "Cake" to R.drawable.cake,
+                    "Pizza" to R.drawable.pizza,
+                    "Sandwich" to R.drawable.sandwiches,
+                    "Noodles" to R.drawable.noodles,
+                    "Pasta" to R.drawable.pasta,
+                    "Biryani" to R.drawable.biryani,
+                    "Burger" to R.drawable.burger,
+                    "Ice Cream" to R.drawable.icecream,
+                    "Dal Rice" to R.drawable.dalrice,
+                )
+
+                categories.chunked(3).forEach { rowItems ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        rowItems.forEach { (label, imageRes) ->
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Image(
+                                    painter = painterResource(id = imageRes),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .shadow(3.dp, shape = RoundedCornerShape(10.dp))
+                                        .background(Color.White, RoundedCornerShape(10.dp))
+                                        .padding(8.dp)
+                                )
+                                Text(
+                                    text = label,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(top = 8.dp),
+                                    color = Color.Black
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
